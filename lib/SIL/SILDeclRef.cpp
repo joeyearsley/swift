@@ -115,20 +115,13 @@ bool swift::requiresForeignEntryPoint(ValueDecl *vd) {
 
 SILDeclRef::SILDeclRef(ValueDecl *vd, SILDeclRef::Kind kind,
                        bool isForeign,
-                       // SWIFT_ENABLE_TENSORFLOW
-                       AutoDiffDerivativeFunctionIdentifier *autoDiffFuncId)
-                       // SWIFT_ENABLE_TENSORFLOW END
+                       AutoDiffDerivativeFunctionIdentifier *derivativeId)
   : loc(vd), kind(kind), isForeign(isForeign), defaultArgIndex(0),
-    // SWIFT_ENABLE_TENSORFLOW
-    autoDiffDerivativeFunctionIdentifier(autoDiffFuncId)
-    // SWIFT_ENABLE_TENSORFLOW END
+    derivativeFunctionIdentifier(derivativeId)
 {}
 
 SILDeclRef::SILDeclRef(SILDeclRef::Loc baseLoc, bool asForeign) 
-  : defaultArgIndex(0),
-    // SWIFT_ENABLE_TENSORFLOW
-    autoDiffDerivativeFunctionIdentifier(nullptr)
-    // SWIFT_ENABLE_TENSORFLOW END
+  : defaultArgIndex(0), derivativeFunctionIdentifier(nullptr)
 {
   if (auto *vd = baseLoc.dyn_cast<ValueDecl*>()) {
     if (auto *fd = dyn_cast<FuncDecl>(vd)) {
@@ -939,9 +932,8 @@ SILDeclRef SILDeclRef::getNextOverriddenVTableEntry() const {
 SILDeclRef SILDeclRef::getOverriddenWitnessTableEntry() const {
   auto bestOverridden =
     getOverriddenWitnessTableEntry(cast<AbstractFunctionDecl>(getDecl()));
-  // SWIFT_ENABLE_TENSORFLOW
-  return SILDeclRef(bestOverridden, kind, autoDiffDerivativeFunctionIdentifier);
-  // SWIFT_ENABLE_TENSORFLOW END
+  return SILDeclRef(bestOverridden, kind, isForeign,
+                    derivativeFunctionIdentifier);
 }
 
 AbstractFunctionDecl *SILDeclRef::getOverriddenWitnessTableEntry(

@@ -4574,6 +4574,7 @@ getWitnessFunctionRef(SILGenFunction &SGF,
   switch (witnessKind) {
   case WitnessDispatchKind::Static:
     if (auto *autoDiffFuncId = witness.autoDiffDerivativeFunctionIdentifier) {
+      llvm::errs() << "HI 2\n";
       auto originalFn = SGF.emitGlobalFunctionRef(
           loc, witness.asAutoDiffOriginalFunction());
       auto *loweredIndices = autodiff::getLoweredParameterIndices(

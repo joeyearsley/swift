@@ -395,7 +395,6 @@ public:
     if (!reqAccessor) {
       if (auto witness = asDerived().getWitness(requirementRef.getDecl())) {
         return addMethodImplementation(requirementRef,
-                                       // SWIFT_ENABLE_TENSORFLOW
                                        requirementRef.withDecl(
                                            witness.getDecl()),
                                        witness);
@@ -418,7 +417,6 @@ public:
       witnessStorage->getSynthesizedAccessor(reqAccessor->getAccessorKind());
 
     return addMethodImplementation(requirementRef,
-                                   // SWIFT_ENABLE_TENSORFLOW
                                    requirementRef.withDecl(witnessAccessor),
                                    witness);
   }
